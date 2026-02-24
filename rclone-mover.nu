@@ -34,7 +34,7 @@ def main [command: string] {
           rm $queue_file
           print "Cleared queued upload"
         }
-        rclone move --progress --transfers 2 $source $destination
+        rclone move --progress --transfers 2 --order-by size,asc $source $destination
         if not ($queue_file | path exists) {
           break
         }
