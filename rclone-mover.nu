@@ -22,11 +22,16 @@ def main [command: string] {
       if (session_exists) {
         touch $queue_file
         print "Upload in progress, queued another run after it finishes"
-      } else {
-        create_session $"nu \"($self_path)\" upload"
-        print $"Started tmux session '($session_name)'"
-        print $"Moving ($source) -> ($destination)"
+        print "Checking for race condition"
+        sleep 1sec
+        if (session_exists) {
+          return
+        }
+        print "Race condition detected, starting new session"
       }
+      create_session $"nu \"($self_path)\" upload"
+      print $"Started tmux session '($session_name)'"
+      print $"Moving ($source) -> ($destination)"
     }
     "upload" => {
       loop {
