@@ -39,7 +39,7 @@ def main [command: string] {
           rm $queue_file
           print "Cleared queued upload"
         }
-        rclone move --progress --transfers 2 --order-by size,asc --delete-empty-src-dirs $source $destination
+        rclone move --progress --transfers 2 --order-by size,asc --delete-empty-src-dirs --exclude ".rsync-partial/**" $source $destination
         if not ($queue_file | path exists) {
           break
         }
